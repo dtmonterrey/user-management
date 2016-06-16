@@ -98,6 +98,7 @@ class RegistrationForm extends Model
 			// and without username (username will be filled with email value after confirmation)
 			if ( Yii::$app->getModule('user-management')->emailConfirmationRequired )
 			{
+				$user->username = '';
 				$user->status = User::STATUS_INACTIVE;
 				$user->generateConfirmationToken();
 				$user->save(false);
