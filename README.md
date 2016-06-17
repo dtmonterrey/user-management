@@ -20,13 +20,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-composer require --prefer-dist webvimark/module-user-management "*"
+composer require --prefer-dist webvimark/module-user-management 1.0.5
 ```
 
 or add
 
 ```
-"webvimark/module-user-management": "*"
+"webvimark/module-user-management": "1.0.5"
 ```
 
 to the require section of your `composer.json` file.
@@ -52,6 +52,8 @@ Configuration
 'modules'=>[
 	'user-management' => [
 		'class' => 'webvimark\modules\UserManagement\UserManagementModule',
+
+		// 'enableRegistration' => true,
 
 		// Here you can set your handler to change layout for any controller or action
 		// Tip: you can use this event in any module
@@ -229,6 +231,10 @@ List of supported events can be found in *UserAuthEvent* class
 
 FAQ
 ---
+
+**Question**: Do you have API docs?
+
+**Answer**: Check this one http://opensource.id5.com.br/webvimark/doc/index.html (Credits to [lukBarros](https://github.com/lukBarros))
 
 **Question**: I want users to register and login with they e-mails! Mmmmm... And they should confirm it too!
 

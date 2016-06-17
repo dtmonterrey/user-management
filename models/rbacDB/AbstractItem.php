@@ -2,11 +2,14 @@
 namespace webvimark\modules\UserManagement\models\rbacDB;
 
 use webvimark\modules\UserManagement\components\AuthHelper;
+use webvimark\modules\UserManagement\components\AbstractItemEvent;
 use webvimark\modules\UserManagement\UserManagementModule;
+use Yii;
+use yii\base\Event;
+use yii\base\ModelEvent;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
-use Yii;
 use yii\helpers\Inflector;
 use yii\rbac\DbManager;
 
@@ -25,6 +28,9 @@ use yii\rbac\DbManager;
  */
 abstract class AbstractItem extends ActiveRecord
 {
+	const EVENT_BEFORE_ADD_CHILDREN = 'beforeAddChildren';
+	const EVENT_BEFORE_REMOVE_CHILDREN = 'beforeRemoveChildren';
+
 	const TYPE_ROLE = 1;
 	const TYPE_PERMISSION = 2;
 	const TYPE_ROUTE = 3;
@@ -79,8 +85,9 @@ abstract class AbstractItem extends ActiveRecord
 
 		$childrenNames = (array) $childrenNames;
 
-		$dbManager = new DbManager();
+		$dbManager = Yii::$app->authManager instanceof DbManager ? Yii::$app->authManager : new DbManager();
 
+		static::beforeAddChildren($parentName, $childrenNames, $throwException = false);
 		foreach ($childrenNames as $childName)
 		{
 			$child = (object)['name'=>$childName];
@@ -109,6 +116,7 @@ abstract class AbstractItem extends ActiveRecord
 	{
 		$childrenNames = (array) $childrenNames;
 
+		static::beforeRemoveChildren($parentName, $childrenNames);
 		foreach ($childrenNames as $childName)
 		{
 			Yii::$app->db->createCommand()
@@ -183,12 +191,15 @@ abstract class AbstractItem extends ActiveRecord
 	 */
 	public function validateUniqueName($attribute)
 	{
-		if ( Role::find()->where(['name'=>$this->name])->exists() )
+		if ( $this->isNewRecord || ( $this->oldAttributes['name'] && $this->oldAttributes['name'] !== $this->name ) )
 		{
-			$this->addError('name', Yii::t('yii', '{attribute} "{value}" has already been taken.', [
-				'attribute' => $this->getAttributeLabel($attribute),
-				'value'     => $this->$attribute,
-			]));
+			if ( Role::find()->where(['name'=>$this->name])->exists() )
+			{
+				$this->addError('name', Yii::t('yii', '{attribute} "{value}" has already been taken.', [
+					'attribute' => $this->getAttributeLabel($attribute),
+					'value'     => $this->$attribute,
+				]));
+			}
 		}
 	}
 
@@ -246,5 +257,17 @@ abstract class AbstractItem extends ActiveRecord
 		parent::afterDelete();
 
 		AuthHelper::invalidatePermissions();
+	}
+
+	public static function beforeAddChildren($parentName, $childrenNames, $throwException = false)
+	{
+		$event = new AbstractItemEvent(compact('parentName', 'childrenNames', 'throwException'));
+		$event->trigger(get_called_class(), self::EVENT_BEFORE_ADD_CHILDREN, $event);
+	}
+
+	public static function beforeRemoveChildren($parentName, $childrenNames)
+	{
+		$event = new AbstractItemEvent(compact('parentName', 'childrenNames', 'throwException'));
+		$event->trigger(get_called_class(), self::EVENT_BEFORE_REMOVE_CHILDREN, $event);
 	}
 } 

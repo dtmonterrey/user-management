@@ -10,9 +10,7 @@ use webvimark\modules\UserManagement\models\rbacDB\Route;
 use webvimark\modules\UserManagement\models\rbacDB\search\PermissionSearch;
 use webvimark\components\AdminDefaultController;
 use webvimark\modules\UserManagement\UserManagementModule;
-use yii\db\Query;
 use Yii;
-use yii\rbac\DbManager;
 
 class PermissionController extends AdminDefaultController
 {
@@ -117,12 +115,13 @@ class PermissionController extends AdminDefaultController
 	 * Add new routes and remove unused (for example if module or controller was deleted)
 	 *
 	 * @param string $id
+	 * @param null   $deleteUnused
 	 *
 	 * @return \yii\web\Response
 	 */
-	public function actionRefreshRoutes($id)
+	public function actionRefreshRoutes($id, $deleteUnused = null)
 	{
-		Route::refreshRoutes();
+		Route::refreshRoutes($deleteUnused !== null);
 
 		return $this->redirect(['view', 'id'=>$id]);
 	}

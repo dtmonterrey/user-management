@@ -51,12 +51,21 @@ $this->params['breadcrumbs'][] = $this->title;
 							<fieldset>
 								<legend><?= $groupName ?></legend>
 
-								<?= Html::checkboxList(
-									'child_permissions',
-									ArrayHelper::map($childPermissions, 'name', 'name'),
-									ArrayHelper::map($permissions, 'name', 'description'),
-									['separator'=>'<br>']
-								) ?>
+								<?php foreach ($permissions as $permission): ?>
+									<label>
+										<?php $isChecked = in_array($permission->name, ArrayHelper::map($childPermissions, 'name', 'name')) ? 'checked' : '' ?>
+										<input type="checkbox" <?= $isChecked ?> name="child_permissions[]" value="<?= $permission->name ?>">
+										<?= $permission->description ?>
+									</label>
+
+									<?= GhostHtml::a(
+										'<span class="glyphicon glyphicon-edit"></span>',
+										['view', 'id'=>$permission->name],
+										['target'=>'_blank']
+									) ?>
+									<br/>
+								<?php endforeach ?>
+
 							</fieldset>
 							<br/>
 						</div>
@@ -84,13 +93,24 @@ $this->params['breadcrumbs'][] = $this->title;
 					<span class="glyphicon glyphicon-th"></span> Routes
 
 					<?= Html::a(
+						'Refresh routes (and delete unused)',
+						['refresh-routes', 'id'=>$item->name, 'deleteUnused'=>1],
+						[
+							'class' => 'btn btn-default btn-sm pull-right',
+							'style'=>'margin-top:-5px; text-transform:none;',
+							'data-confirm'=>UserManagementModule::t('back', 'Routes that are not exists in this application will be deleted. Do not recommended for application with "advanced" structure, because frontend and backend have they own set of routes.'),
+						]
+					) ?>
+
+					<?= Html::a(
 						'Refresh routes',
 						['refresh-routes', 'id'=>$item->name],
 						[
 							'class' => 'btn btn-default btn-sm pull-right',
-							'style'=>'margin-top:-5px',
+							'style'=>'margin-top:-5px; text-transform:none;',
 						]
 					) ?>
+
 
 				</strong>
 			</div>

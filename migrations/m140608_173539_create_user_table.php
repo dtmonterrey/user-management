@@ -13,7 +13,12 @@ class m140608_173539_create_user_table extends Migration
 			$tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
 		}
 
-		$this->createTable(Yii::$app->getModule('user-management')->user_table, array(
+	        // Check if user Table exist
+	        // $tablename = \Yii::$app->db->tablePrefix.'user';
+	        $tablename = \Yii::$app->getModule('user-management')->user_table;
+
+		// Create user table
+		$this->createTable($tablename, array(
 			'id'                 => 'pk',
 			'username'           => 'string not null',
 			'auth_key'           => 'varchar(32) not null',
@@ -24,8 +29,6 @@ class m140608_173539_create_user_table extends Migration
 			'created_at'         => 'int not null',
 			'updated_at'         => 'int not null',
 		), $tableOptions);
-
-
 	}
 
 	public function safeDown()
