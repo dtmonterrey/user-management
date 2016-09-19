@@ -7,7 +7,9 @@ class m160919_162800_insert_become_user_permission extends Migration
 {
     public function safeUp()
     {
-        Permission::create('becomeUser', 'Transform current user to someone else', 'userManagement');
+        Permission::assignRoutes('becomeUser', [
+			'/user-management/user/become-user',
+		], 'Become someone user', 'userManagement');
     }
     
     public function safeDown()
