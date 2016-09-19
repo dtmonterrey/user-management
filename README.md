@@ -20,13 +20,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-composer require --prefer-dist webvimark/module-user-management 1.0.5
+composer require --prefer-dist webvimark/module-user-management 1.0.8
 ```
 
 or add
 
 ```
-"webvimark/module-user-management": "1.0.5"
+"webvimark/module-user-management": "1.0.8"
 ```
 
 to the require section of your `composer.json` file.
@@ -54,6 +54,18 @@ Configuration
 		'class' => 'webvimark\modules\UserManagement\UserManagementModule',
 
 		// 'enableRegistration' => true,
+
+		// Add regexp validation to passwords. Default pattern does not restrict user and can enter any set of characters.
+		// The example below allows user to enter :
+		// any set of characters
+		// (?=\S{8,}): of at least length 8
+		// (?=\S*[a-z]): containing at least one lowercase letter
+		// (?=\S*[A-Z]): and at least one uppercase letter
+		// (?=\S*[\d]): and at least one number
+		// $: anchored to the end of the string
+
+		//'passwordRegexp' => '^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$',
+		
 
 		// Here you can set your handler to change layout for any controller or action
 		// Tip: you can use this event in any module
@@ -85,6 +97,7 @@ To see full list of options check *UserManagementModule* file
 'modules'=>[
 	'user-management' => [
 		'class' => 'webvimark\modules\UserManagement\UserManagementModule',
+	        'controllerNamespace'=>'vendor\webvimark\modules\UserManagement\controllers', // To prevent yii help from crashing
 	],
 ],
 
@@ -253,5 +266,3 @@ FAQ
 4) Define your own UserManagementModule::$registrationFormClass. In this class you can do whatever you want like validating custom forms and saving profiles
 
 5) Create your controller where user can view profiles
-
-
