@@ -62,5 +62,26 @@ class UserController extends AdminDefaultController
 
 		return $this->renderIsAjax('changePassword', compact('model'));
 	}
+	
+	/**
+	 * transform current user in user with ID $id
+	 * @param unknown $id
+	 */
+	public function actionBecomeUser($id)
+	{
+	    $model = User::findOne($id);
+	
+	    if ( !$model )
+	    {
+	        throw new NotFoundHttpException('User not found');
+	    }
+	
+	    if (User::canRoute($this->route)) {
+	        Yii::$app->user->login($model);
+	        $this->goHome();
+	    } else {
+	        throw new ForbiddenHttpException();
+	    }
+	}
 
 }
