@@ -8,7 +8,7 @@ class m160919_162800_insert_become_user_permission extends Migration
 {
     public function safeUp()
     {
-        Route::refreshRoutes();
+        Route::refreshRoutes(false);
         
         Permission::assignRoutes('becomeUser', [
 			'/user-management/user/become-user',
