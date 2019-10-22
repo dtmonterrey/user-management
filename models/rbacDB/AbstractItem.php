@@ -1,14 +1,11 @@
 <?php
 namespace webvimark\modules\UserManagement\models\rbacDB;
 
-use webvimark\modules\UserManagement\components\AuthHelper;
-use webvimark\modules\UserManagement\components\AbstractItemEvent;
-use webvimark\modules\UserManagement\UserManagementModule;
 use Yii;
-use yii\base\Event;
-use yii\base\ModelEvent;
+use webvimark\modules\UserManagement\UserManagementModule;
+use webvimark\modules\UserManagement\components\AbstractItemEvent;
+use webvimark\modules\UserManagement\components\AuthHelper;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\Inflector;
 use yii\rbac\DbManager;
@@ -205,7 +202,7 @@ abstract class AbstractItem extends ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return ActiveQuery the newly created [[ActiveQuery]] instance.
+	 * @return yii\data\ActiveQuery the newly created [[ActiveQuery]] instance.
 	 */
 	public static function find()
 	{
@@ -267,8 +264,8 @@ abstract class AbstractItem extends ActiveRecord
 
 	/**
 	 * 
-	 * @param unknown $parentName
-	 * @param unknown $childrenNames
+	 * @param mixed $parentName
+	 * @param mixed $childrenNames
 	 * @param boolean $throwException
 	 */
 	public static function beforeRemoveChildren($parentName, $childrenNames, $throwException = false)
