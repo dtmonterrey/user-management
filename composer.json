@@ -7,9 +7,11 @@
 		}
 	},
 	"require": {
+		"yiisoft/yii2": "~2.0.4",
+		"yiisoft/yii2-bootstrap": "~2.0.0",
+		"ikimea/browser": "1.12.0",
 		"webvimark/components": "^1.0.0",
 		"webvimark/bootstrap-switch": "^1.0.0",
-		"ikimea/browser": "1.12.0",
 		"webvimark/date-range-picker": "^1.0.0",
 		"webvimark/helpers": "^1.0.0",
 		"webvimark/grid-bulk-actions": "^1.0.0",
