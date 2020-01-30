@@ -78,7 +78,7 @@ class AuthHelper
 	 */
 	public static function ensurePermissionsUpToDate()
 	{
-		if ( !Yii::$app->user->isGuest )
+		if ( !Yii::$app->user->getIsGuest() )
 		{
 			if ( Yii::$app->session->get(self::SESSION_PREFIX_LAST_UPDATE) != filemtime(self::getPermissionsLastModFile()) )
 			{
