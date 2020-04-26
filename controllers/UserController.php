@@ -6,6 +6,7 @@ use webvimark\components\AdminDefaultController;
 use Yii;
 use webvimark\modules\UserManagement\models\User;
 use webvimark\modules\UserManagement\models\search\UserSearch;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -65,7 +66,7 @@ class UserController extends AdminDefaultController
 	
 	/**
 	 * transform current user in user with ID $id
-	 * @param unknown $id
+	 * @param int $id
 	 */
 	public function actionBecomeUser($id)
 	{
